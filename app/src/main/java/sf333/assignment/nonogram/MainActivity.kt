@@ -208,29 +208,29 @@ fun CreateCell(
             Filled()
         }
 
-        // auto logic
-//        for (i in 1..level.size) {
-//            var HorizontalScore = 0
-//            var VerticalScore = 0
-//
-//            for (j in 1..level.size){
-//                if (level[i][j] == 1 && tempClickedList[i][j] == 0){
-//                    HorizontalScore -= 1
-//                }
-//
-//                if (level[j][i] == 1 && tempClickedList[j][i] == 0){
-//                    VerticalScore -= 1
-//                }
-//            }
-//            if (HorizontalScore >= 0) {
-//                tempClickedList[i] = Array(level.size) { 1 }
-//            }
-//            if (VerticalScore >= 0){
-//                for (j in 1..level.size){
-//                    tempClickedList[j][i] = 1
-//                }
-//            }
-//        }
+        for (i in 0..level.size-1) {
+            var HorizontalScore = 0
+            var VerticalScore = 0
+
+            for (j in 0..level.size - 1){
+                if (level[i][j] == 1 && tempClickedList[i][j] == 0){
+                    HorizontalScore -= 1
+                }
+
+                if (level[j][i] == 1 && tempClickedList[j][i] == 0){
+                    VerticalScore -= 1
+                }
+            }
+
+            if (HorizontalScore >= 0) {
+                tempClickedList[i] = Array(level.size) { 1 }
+            }
+            if (VerticalScore >= 0){
+                for (j in 0..level.size-1){
+                    tempClickedList[j][i] = 1
+                }
+            }
+        }
 
     }
 }
