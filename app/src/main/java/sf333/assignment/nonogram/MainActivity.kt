@@ -71,14 +71,52 @@ val level = listOf(
 var tempClickedList = Array(level.size) { Array(level.size) { 0 } }
 var heart = 3
 
-fun createHint(
-    level: List<List<Int>>
-){
-    for (i in 1..level.size) {
+fun createHint(level: List<List<Int>>): Pair<MutableList<MutableList<Int>>, MutableList<MutableList<Int>>> {
+    val rowHints: MutableList<MutableList<Int>> = mutableListOf()
+    val colHints: MutableList<MutableList<Int>> = MutableList(level[0].size) { mutableListOf() }
 
+    // Calculate hints for rows
+    for (i in level.indices) {
+        var rowCount = 0
+        val rowtemplist: MutableList<Int> = mutableListOf()
+
+        for (j in level[i].indices) {
+            if (level[i][j] == 1) {
+                rowCount++
+            } else if (rowCount > 0) {
+                rowtemplist.add(rowCount)
+                rowCount = 0
+            }
+        }
+        if (rowCount > 0) {
+            rowtemplist.add(rowCount)
+        }
+        rowHints.add(rowtemplist)
     }
 
+    for (i in level[0].indices) {
+        var colCount = 0
+        val coltemplist: MutableList<Int> = mutableListOf()
+
+        for (j in level.indices) {
+            if (level[j][i] == 1) {
+                colCount++
+            } else if (colCount > 0) {
+                coltemplist.add(colCount)
+                colCount = 0
+            }
+        }
+        if (colCount > 0) {
+            coltemplist.add(colCount)
+        }
+        colHints[i] = coltemplist
     }
+
+    return Pair(rowHints, colHints)
+}
+
+
+
 
 @Composable
 fun mainFunc() {
@@ -194,13 +232,27 @@ fun CreateCell(
     }
 }
 
-
-
 @Composable
 fun CreateBoard(
     level: List<List<Int>>,
     modifier: Modifier = Modifier
 ) {
+    val hintsPair = createHint(level)
+
+    val rowHints = hintsPair.first
+    val colHints = hintsPair.second
+
+    println("Row Hints:")
+    for (row in rowHints) {
+        println(row)
+    }
+
+    println("\nColumn Hints:")
+    for (i in colHints.indices) {
+        val colHint = colHints[i]
+        println("Column $i: $colHint")
+    }
+
     Column (
         modifier = Modifier
             .border(1.dp, Color.Gray)
