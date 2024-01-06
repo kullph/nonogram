@@ -20,10 +20,13 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -242,17 +245,6 @@ fun CreateBoard(
     val rowHints = hintsPair.first
     val colHints = hintsPair.second
 
-    println("Row Hints:")
-    for (row in rowHints) {
-        println(row)
-    }
-
-    println("\nColumn Hints:")
-    for (i in colHints.indices) {
-        val colHint = colHints[i]
-        println("Column $i: $colHint")
-    }
-
     Column (
         modifier = Modifier
             .border(1.dp, Color.Gray)
@@ -261,20 +253,51 @@ fun CreateBoard(
             modifier = Modifier
                 .border(1.dp, Color.Gray)
         ){
-            Text("${heart}")
             Column (
                 modifier = Modifier
-                    .border(1.dp, Color.Gray)
-                    .width(300.dp)
+                    .width(300.dp/level.size)
             ){
-                Text("2")
+                Text("${heart}")
+            }
+            Column (
+                modifier = Modifier
+            ){
+                LazyRow(
+                    modifier = Modifier
+                ) {
+                    items(colHints) { col ->
+                        LazyColumn(
+                            modifier = Modifier
+                                .border(1.dp, Color.Gray)
+                                .width(300.dp / level.size)
+                        ){
+                            items(col) { item ->
+                                Text(text = "$item")
+                            }
+                        }
+                    }
+                }
             }
         }
         Row (
             modifier = Modifier
                 .border(1.dp, Color.Gray)
         ){
-            Text("3")
+            LazyColumn (
+                modifier = Modifier
+                    .width(300.dp / level.size)
+            ){
+                items(rowHints) { row ->
+                    LazyRow (
+                        modifier = Modifier
+                            .height(300.dp / level.size)
+                    ){
+                        items(row) { item ->
+                            Text(text="$item")
+                        }
+                    }
+                }
+            }
             Column (
                 modifier = Modifier
                     .border(1.dp, Color.Gray)
